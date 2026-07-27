@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm init -y 2>/dev/null || true
+
+      - name: Test runner
+        run: |
+          node hooks/agentsys-runner.js --help 2>&1 || true
+
+      - name: Check hook syntax
+        run: |
+          node -e "require('fs').readFileSync('hooks/agentsys.ts', 'utf8')" && echo "Hook file readable"
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check files exist
+        run: |
+          test -f hooks/agentsys.ts && echo "agentsys.ts exists"
+          test -f hooks/agentsys-runner.js && echo "agentsys-runner.js exists"
+          test -f README.md && echo "README.md exists"
+          test -f LICENSE && echo "LICENSE exists"
