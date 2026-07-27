@@ -1,13 +1,14 @@
 /**
  * mimocode-agentsys — File hook that routes agentsys slash commands to the agentsys runner.
  *
- * Since MiMoCode 0.38.9 doesn't support external plugins, this hook intercepts
- * bash commands starting with `/` and rewrites them to call the agentsys runner.
- *
- * Pattern matches rtk.ts: reads from output.args.command, writes to output.args.command.
+ * Pattern matches rtk.ts exactly — same structure, same handlers, same logging.
  */
 
-const AGENTSYS_RUNNER = "/home/murat/.config/mimocode/hooks/agentsys-runner.js"
+import { writeFileSync } from "fs"
+const LOG = "/tmp/agentsys-hook.log"
+writeFileSync(LOG, `[${new Date().toISOString()}] MODULE IMPORTED\n`, { flag: "a" })
+
+const AGENTSYS_RUNNER = "agentsys-runner"
 
 const COMMAND_MAP: Record<string, string> = {
     "/repo-intel": "repo-intel",
@@ -51,8 +52,8 @@ function rewriteCommand(command: string): string | null {
         if (cmd in COMMAND_MAP) {
             const args = parts.slice(1).join(" ")
             const runnerCmd = args
-                ? `node ${AGENTSYS_RUNNER} ${COMMAND_MAP[cmd]} ${args}`
-                : `node ${AGENTSYS_RUNNER} ${COMMAND_MAP[cmd]}`
+                ? `${AGENTSYS_RUNNER} ${COMMAND_MAP[cmd]} ${args}`
+                : `${AGENTSYS_RUNNER} ${COMMAND_MAP[cmd]}`
             rewritten.push(line.replace(stripped, runnerCmd, 1))
         } else {
             rewritten.push(line)
@@ -72,7 +73,11 @@ export default {
         if (typeof command !== "string" || !command) return
         const rewritten = rewriteCommand(command)
         if (rewritten !== command) {
+            writeFileSync(LOG, `[${new Date().toISOString()}] REWRITE:\n  FROM: ${JSON.stringify(command)}\n  TO:   ${JSON.stringify(rewritten)}\n`, { flag: "a" })
             args.command = rewritten
         }
+    },
+    "shell.env": async (input: { cwd: string }, output: { env: Record<string, string> }) => {
+        writeFileSync(LOG, `[${new Date().toISOString()}] SHELL.ENV: ${input.cwd}\n`, { flag: "a" })
     },
 }
