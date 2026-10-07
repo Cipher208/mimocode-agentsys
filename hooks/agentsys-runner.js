@@ -9,7 +9,9 @@
  */
 
 const path = require('path');
-const AGENTSYS_LIB = '/home/murat/Projects/repos/agentsys/lib';
+// Where the agentsys library lives. Override with AGENTSYS_LIB; by default the
+// sibling checkout next to this repo.
+const AGENTSYS_LIB = process.env.AGENTSYS_LIB || path.join(__dirname, '..', '..', 'agentsys', 'lib');
 
 const commands = {
   'repo-intel': () => {
