@@ -32,8 +32,9 @@ an individual is officially representing the community in public spaces.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-murat@vm1282045.cloud.nuxt.network.
+reported to the community leaders responsible for enforcement through
+[GitHub](https://github.com/Cipher208) — please use a private message to the
+maintainer rather than a public issue.
 
 ## Attribution
 

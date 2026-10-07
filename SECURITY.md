@@ -2,7 +2,9 @@
 
 ## Reporting a Vulnerability
 
-Please report security vulnerabilities by emailing murat@vm1282045.cloud.nuxt.network.
+Please report vulnerabilities through GitHub's private vulnerability reporting:
+open the **Security** tab of this repository and choose **Report a vulnerability**.
+This creates a private advisory visible only to the maintainers.
 
 Do NOT create public GitHub issues for security vulnerabilities.
 
